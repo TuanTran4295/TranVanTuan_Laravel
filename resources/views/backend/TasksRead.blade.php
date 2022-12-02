@@ -17,7 +17,11 @@
         @foreach ($tasks as $index => $rows)
         <tr>
             <td>{{ $index+1 }}</td>
-            <td></td>
+            <td>
+                @if(file_exists('upload/tasks/'.$rows->photo))
+					<img style="width: 100px;" src="{{ asset('upload/tasks/'.$rows->photo)}}">
+				@endif
+            </td>
             <td>{{ $rows->title }}</td>
             <td>{{ $rows->description }}</td>
             <td class='text-center'>

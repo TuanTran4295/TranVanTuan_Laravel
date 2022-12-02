@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Tasks extends Model
 {
     use HasFactory;
-    //create
+    protected $fillable = [
+        'title',
+        'description',
+        'id',
+        'photo',
+    ]; 
+    /* //create
     public function modelCreate(){
         $photo = "";
         //neu co anh thi update anh
@@ -21,4 +27,5 @@ class Tasks extends Model
         //create ban ghi
         DB::table("task")->insert(["photo"=>$photo]);    
     }
+    */
 }

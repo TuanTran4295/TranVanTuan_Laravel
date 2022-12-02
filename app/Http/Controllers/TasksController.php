@@ -37,6 +37,22 @@ class TasksController extends Controller
         DB::table("tasks")->where("id","=",$id)->update(["title"=>$title]);
         //update description
         DB::table("tasks")->where("id","=",$id)->update(["description"=>$description]);
+        // if(Request::hasFile("photo")){
+    	// 	//---
+    	// 	//lấy ảnh củ để xóa
+    	// 	//select("photo") lấy cột photo
+    	// 	$oldPhoto = DB::table("tasks")->where("id","=",$id)->select("photo")->first();
+    	// 	if(isset($oldPhoto->photo) && file_exists("upload/tasks/".$oldPhoto->photo))
+    	// 		unlink("upload/tasks/".$oldPhoto->photo);
+    	// 	//---
+    	// 	//Request::file("photo")->getClientOriginalName() lấy tên file
+    	// 	$photo = time()."_".Request::file("photo")->getClientOriginalName();
+    	// 	//thực hiện load ảnh
+    	// 	Request::file("photo")->move("upload/tasks",$photo);
+    	// 	//uploaf bản ghi
+    	// 	DB::table("tasks")->where("id","=",$id)->update(["photo"=>$photo]);
+    	// }
+        
        //di chuyển đến 1 url khác
        return redirect(url("admin/tasks"));
     }
@@ -45,14 +61,22 @@ class TasksController extends Controller
         return View::make("backend.TasksCreate");
     }
     //create -POST
-    public function createPost(){
+    public function createPost(Request $request){
         $title = request("title"); // Request::get("title")
         $description = request("description"); // Request::get("description")
+        $photo = "";
+        //neu co anh thi update anh
+        if($request->hasFile("photo")){
+            //Request::file("photo")->getClientOriginalName() lay ten file
+            $photo = time()."_".$request->file("photo")->getClientOriginalName();
+            //thuc hien upload anh
+            $request->file("photo")->move("upload/tasks",$photo);
+        }
         //kiểm tra xem title đã tồn tại chưa , nếu chưa tồn tại thì mới cho insert
         $countTitle = DB::table("tasks")->where("title","=",$title)->Count();
         if($countTitle == 0){
             //insert bản ghi
-            DB::table("tasks")->insert(["title"=>$title,"description"=>$description]);
+            DB::table("tasks")->insert(["title"=>$title,"description"=>$description, "photo"=>$photo]);
             //di chuyển đến 1 url khác
             return redirect(url("admin/tasks"));
         }else{

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        DB::table('tasks')->insert([
+            ['title'=>'tasks 1' ,  'description'=>'Đây là tasks 1' , 'photo'=>''],
+            ['title'=>'tasks 2' ,  'description'=>'Đây là tasks 2' , 'photo'=>''],
+            ['title'=>'tasks 3' ,  'description'=>'Đây là tasks 3' , 'photo'=>''],
+            ['title'=>'tasks 4' ,  'description'=>'Đây là tasks 4' , 'photo'=>''],
+        ]);
     }
 }

@@ -2,7 +2,7 @@
 @extends("backend.Layout")
 @section("do-du-lieu-vao-layout")
 <h1>Edit task</h1>
-<form method='post' action='#'>
+<form method='post' action='#' enctype= "multipart/form-data">
 @csrf
     <div class="form-group">
         <label for="title">Title</label>
