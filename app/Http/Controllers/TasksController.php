@@ -30,28 +30,28 @@ class TasksController extends Controller
         return View::make("backend.TasksUpdate",["tasks"=>$tasks]);
     }
     //update POST
-    public function updatePost($id){
+    public function updatePost(Request $request, $id){
         $title = request("title"); // Request::get("title")
         $description = request("description");//Request::get("description")
         //update title
         DB::table("tasks")->where("id","=",$id)->update(["title"=>$title]);
         //update description
         DB::table("tasks")->where("id","=",$id)->update(["description"=>$description]);
-        // if(Request::hasFile("photo")){
-    	// 	//---
-    	// 	//lấy ảnh củ để xóa
-    	// 	//select("photo") lấy cột photo
-    	// 	$oldPhoto = DB::table("tasks")->where("id","=",$id)->select("photo")->first();
-    	// 	if(isset($oldPhoto->photo) && file_exists("upload/tasks/".$oldPhoto->photo))
-    	// 		unlink("upload/tasks/".$oldPhoto->photo);
-    	// 	//---
-    	// 	//Request::file("photo")->getClientOriginalName() lấy tên file
-    	// 	$photo = time()."_".Request::file("photo")->getClientOriginalName();
-    	// 	//thực hiện load ảnh
-    	// 	Request::file("photo")->move("upload/tasks",$photo);
-    	// 	//uploaf bản ghi
-    	// 	DB::table("tasks")->where("id","=",$id)->update(["photo"=>$photo]);
-    	// }
+        if($request->hasFile("photo")){
+    		//---
+    		//lấy ảnh củ để xóa
+    		//select("photo") lấy cột photo
+    		$oldPhoto = DB::table("tasks")->where("id","=",$id)->select("photo")->first();
+    		if(isset($oldPhoto->photo) && file_exists("upload/tasks/".$oldPhoto->photo))
+    			unlink("upload/tasks/".$oldPhoto->photo);
+    		//---
+    		//Request::file("photo")->getClientOriginalName() lấy tên file
+    		$photo = time()."_".$request->file("photo")->getClientOriginalName();
+    		//thực hiện load ảnh
+    		$request->file("photo")->move("upload/tasks",$photo);
+    		//uploaf bản ghi
+    		DB::table("tasks")->where("id","=",$id)->update(["photo"=>$photo]);
+    	}
         
        //di chuyển đến 1 url khác
        return redirect(url("admin/tasks"));
